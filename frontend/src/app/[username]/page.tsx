@@ -22,20 +22,23 @@ export default async function PublicProfile({ params }: { params: { username: st
   let error = null;
 
   try {
-    // In a real production app, we would have a public endpoint for this
-    // For now, we'll fetch from our backend. Since it's SSR, we use full URL.
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}/api/public/${username}`, {
-      next: { revalidate: 60 } // Cache for 60 seconds
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+    console.log(`Fetching public profile from: ${apiUrl}/api/public/${username}`);
+    
+    const response = await fetch(`${apiUrl}/api/public/${username}`, {
+      next: { revalidate: 60 }
     });
     
     if (response.ok) {
       projects = await response.json();
     } else {
-      error = "User not found or profile is private";
+      const errorText = await response.text();
+      console.error(`API Error (${response.status}): ${errorText}`);
+      error = `User not found or profile is private (Status: ${response.status})`;
     }
-  } catch (err) {
-    console.error(err);
-    error = "Failed to load profile";
+  } catch (err: any) {
+    console.error('Fetch error:', err.message);
+    error = `Failed to load profile: ${err.message}`;
   }
 
   return (

@@ -16,8 +16,8 @@ interface Project {
   links: Link[];
 }
 
-export default async function PublicProfile({ params }: { params: { username: string } }) {
-  const { username } = params;
+export default async function PublicProfile({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = await params;
   let projects: Project[] = [];
   let error = null;
 

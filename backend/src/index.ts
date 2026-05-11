@@ -20,9 +20,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Redirect Routes (High priority, catches /:username/:project_slug/:label)
-app.use('/', redirectRoutes);
-
 // Auth Routes
 app.use('/api/auth', authRoutes);
 
@@ -31,6 +28,9 @@ app.use('/api/public', publicRoutes);
 
 // API Routes
 app.use('/api', apiRoutes);
+
+// Redirect Routes (Low priority, catch-all for namespaced links)
+app.use('/', redirectRoutes);
 
 app.listen(PORT, () => {
   console.log(`Pym-Link Backend started at port: ${PORT}`);

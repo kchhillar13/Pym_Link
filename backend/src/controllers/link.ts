@@ -70,3 +70,38 @@ export const getLinks = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const deleteLink = async (req: AuthRequest, res: Response) => {
+  try {
+    const { linkId } = req.params;
+    const userId = req.user?.userId;
+
+    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+    const link = await prisma.link.findUnique({
+      where: { id: linkId as string },
+      include: { 
+        project: {
+          include: { user: true }
+        }
+      },
+    }) as any;
+
+    if (!link || link.project.user_id !== userId) {
+      return res.status(404).json({ error: 'Link not found' });
+    }
+
+    await prisma.link.delete({
+      where: { id: linkId as string },
+    });
+
+    // Invalidate Redis cache
+    const cacheKey = `link:${link.project.user.username}:${link.project.slug}:${link.label}`;
+    await redis.del(cacheKey);
+
+    return res.json({ message: 'Link deleted successfully' });
+  } catch (error) {
+    console.error('Delete link error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};

@@ -1,19 +1,39 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       <header className="px-4 lg:px-6 h-14 flex items-center border-b bg-white">
-        <Link className="flex items-center justify-center" href="/">
+        <Link className="flex items-center justify-center" href={isLoggedIn ? "/dashboard" : "/"}>
           <span className="font-bold text-2xl text-indigo-600">Pym-Link</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/login">
-            Login
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/register">
-            Register
-          </Link>
+          {isLoggedIn ? (
+            <Link className="text-sm font-medium hover:underline underline-offset-4" href="/dashboard">
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link className="text-sm font-medium hover:underline underline-offset-4" href="/login">
+                Login
+              </Link>
+              <Link className="text-sm font-medium hover:underline underline-offset-4" href="/register">
+                Register
+              </Link>
+            </>
+          )}
         </nav>
       </header>
       <main className="flex-1">
@@ -30,18 +50,29 @@ export default function Home() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Link
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-700 disabled:pointer-events-none disabled:opacity-50"
-                  href="/register"
-                >
-                  Get Started
-                </Link>
-                <Link
-                  className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
-                  href="/login"
-                >
-                  Login
-                </Link>
+                {isLoggedIn ? (
+                  <Link
+                    className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-700 disabled:pointer-events-none disabled:opacity-50"
+                    href="/dashboard"
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-700 disabled:pointer-events-none disabled:opacity-50"
+                      href="/register"
+                    >
+                      Get Started
+                    </Link>
+                    <Link
+                      className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
+                      href="/login"
+                    >
+                      Login
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

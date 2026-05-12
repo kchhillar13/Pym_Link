@@ -25,56 +25,84 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-lg w-96">
-        <h3 className="text-2xl font-bold text-center">Create an account</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="mt-4">
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
+      {/* Deep Space Canvas */}
+      <div className="space-canvas" />
+      <div className="mesh-pattern" />
+
+      {/* Header (Minimal) */}
+      <div className="absolute top-0 left-0 p-6 z-10">
+        <Link href="/" className="transition-opacity hover:opacity-80">
+          <span className="text-2xl font-bold tracking-tight glow-text-purple">Pym-Link</span>
+        </Link>
+      </div>
+
+      <div className="w-full max-w-md z-10">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl">
+          <h1 className="text-3xl font-bold text-center mb-8 glow-text-lavender">Create Account</h1>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block" htmlFor="username">Username</label>
+              <label className="block text-sm font-medium text-grey-blue mb-2" htmlFor="username">
+                Username
+              </label>
               <input
                 type="text"
-                placeholder="Username"
-                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                placeholder="johndoe"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-white placeholder:text-white/20 transition-all"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
-            <div className="mt-4">
-              <label className="block" htmlFor="email">Email</label>
+
+            <div>
+              <label className="block text-sm font-medium text-grey-blue mb-2" htmlFor="email">
+                Email Address
+              </label>
               <input
                 type="email"
-                placeholder="Email"
-                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                placeholder="you@example.com"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-white placeholder:text-white/20 transition-all"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-            <div className="mt-4">
-              <label className="block">Password</label>
+            
+            <div>
+              <label className="block text-sm font-medium text-grey-blue mb-2" htmlFor="password">
+                Password
+              </label>
               <input
                 type="password"
-                placeholder="Password"
-                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-white placeholder:text-white/20 transition-all"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
-            <div className="flex items-baseline justify-between">
-              <button className="px-6 py-2 mt-4 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 w-full font-semibold">Register</button>
-            </div>
-            <div className="mt-6 text-grey-dark text-center">
-              Already have an account?{' '}
-              <Link className="text-indigo-600 hover:underline" href="/login">
-                Log in
-              </Link>
-            </div>
-          </div>
-        </form>
+
+            {error && (
+              <p className="text-sm text-red-400 text-center animate-pulse">{error}</p>
+            )}
+
+            <button 
+              type="submit"
+              className="w-full py-3 rounded-lg btn-gradient font-bold shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] transition-all"
+            >
+              Sign Up
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-sm text-grey-blue">
+            Already have an account?{' '}
+            <Link className="text-muted-lavender hover:text-white transition-colors font-medium" href="/login">
+              Log In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
